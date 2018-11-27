@@ -1,4 +1,4 @@
-package com.tautvydas.openglrenderingpractice;
+package com.tautvydas.openglrenderingpractice.lesson1;
 
 import android.opengl.GLES20;
 import android.opengl.GLSurfaceView;
@@ -8,10 +8,11 @@ import android.os.SystemClock;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.FloatBuffer;
+
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
-class BasicRenderer implements GLSurfaceView.Renderer {
+class BasicRenderer1 implements GLSurfaceView.Renderer {
 
     private final int mBytesPerFloat = 4;
     private final int mStrideBytes = 7 * mBytesPerFloat; // How many elements per vertex.
@@ -58,7 +59,7 @@ class BasicRenderer implements GLSurfaceView.Renderer {
                     + "   gl_FragColor = v_Color;     \n"     // Pass the color directly through the pipeline.
                     + "}                              \n";
 
-    public BasicRenderer(){
+    public BasicRenderer1() {
         // This triangle is red, green, and blue.
         final float[] triangle1VerticesData = {
                 // X, Y, Z,

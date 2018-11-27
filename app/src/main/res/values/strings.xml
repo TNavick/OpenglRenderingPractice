@@ -1,3 +1,5 @@
 <resources>
-    <string name="app_name">OpenglRenderingPractice</string>
+    <string name="app_name">Opengl Rendering Practice</string>
+    <string name="lesson1">Lesson 1</string>
+    <string name="lesson2">Lesson 2</string>
 </resources>

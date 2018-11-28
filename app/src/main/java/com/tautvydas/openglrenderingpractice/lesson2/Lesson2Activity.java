@@ -23,6 +23,7 @@ public class Lesson2Activity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        mGLSurfaceView.onResume();
     }
 
     @Override

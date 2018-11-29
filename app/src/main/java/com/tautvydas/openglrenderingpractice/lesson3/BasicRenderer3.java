@@ -270,7 +270,7 @@ class BasicRenderer3 implements GLSurfaceView.Renderer {
         final float bottom = -1.0f;
         final float top = 1.0f;
         final float near = 1.0f;
-        final float far = 10.0f;
+        final float far = 20.0f;
 
         Matrix.frustumM(mProjectionMatrix, 0, left, right, bottom, top, near, far);
     }
@@ -280,11 +280,12 @@ class BasicRenderer3 implements GLSurfaceView.Renderer {
         GLES20.glClear(GLES20.GL_DEPTH_BUFFER_BIT | GLES20.GL_COLOR_BUFFER_BIT);
 
         long time = SystemClock.uptimeMillis() % 10000L;
-        float angleInDegrees = (360.0f / 10000.0f) * ((int) time);
+        float angleInDegrees1 = (360.0f / 10000.0f) * ((int) time);
+        float angleInDegrees2 = (360.0f / 5000.0f) * ((int) time);
 
-        //double angleInRads = Math.toRadians(angleInDegrees);
-        //float sin = (float) Math.sin(angleInRads);
-        //float cos = (float) Math.cos(angleInRads);
+        double angleInRads = Math.toRadians(angleInDegrees1);
+        float sin = (float) Math.sin(angleInRads);
+        float cos = (float) Math.cos(angleInRads);
 
         GLES20.glUseProgram(mPerFragProgramHandle);
 
@@ -299,7 +300,7 @@ class BasicRenderer3 implements GLSurfaceView.Renderer {
         // Calculate position of the light. Rotate and then push into the distance.
         Matrix.setIdentityM(mLightModelMatrix, 0);
         Matrix.translateM(mLightModelMatrix, 0, 0.0f, 0.0f, -5.0f);
-        Matrix.rotateM(mLightModelMatrix, 0, angleInDegrees, 0.0f, 1.0f, 0.0f);
+        Matrix.rotateM(mLightModelMatrix, 0, angleInDegrees2, 0.0f, 1.0f, 0.0f);
         Matrix.translateM(mLightModelMatrix, 0, 0.0f, 0.0f, 2.0f);
 
         Matrix.multiplyMV(mLightPosInWorldSpace, 0, mLightModelMatrix, 0, mLightPosInModelSpace, 0);
@@ -307,27 +308,27 @@ class BasicRenderer3 implements GLSurfaceView.Renderer {
 
         // Draw some cubes.
         Matrix.setIdentityM(mModelMatrix, 0);
-        Matrix.translateM(mModelMatrix, 0, 4.0f, 0.0f, -7.0f);
-        Matrix.rotateM(mModelMatrix, 0, angleInDegrees, 1.0f, 0.0f, 0.0f);
+        Matrix.translateM(mModelMatrix, 0, 4.0f * sin, 4.0f * cos, -7.0f);
+        Matrix.rotateM(mModelMatrix, 0, angleInDegrees1, 1.0f, 0.0f, 0.0f);
         drawCube();
 
         Matrix.setIdentityM(mModelMatrix, 0);
-        Matrix.translateM(mModelMatrix, 0, -4.0f, 0.0f, -7.0f);
-        Matrix.rotateM(mModelMatrix, 0, angleInDegrees, 0.0f, 1.0f, 0.0f);
+        Matrix.translateM(mModelMatrix, 0, -4.0f * sin, -4.0f * cos, -7.0f);
+        Matrix.rotateM(mModelMatrix, 0, angleInDegrees1, 0.0f, 1.0f, 0.0f);
         drawCube();
 
         Matrix.setIdentityM(mModelMatrix, 0);
-        Matrix.translateM(mModelMatrix, 0, 0.0f, 4.0f, -7.0f);
-        Matrix.rotateM(mModelMatrix, 0, angleInDegrees, 0.0f, 0.0f, 1.0f);
+        Matrix.translateM(mModelMatrix, 0, 0.0f, 4.0f * sin, 4.0f * cos - 7.0f);
+        Matrix.rotateM(mModelMatrix, 0, angleInDegrees1, 0.0f, 0.0f, 1.0f);
         drawCube();
 
         Matrix.setIdentityM(mModelMatrix, 0);
-        Matrix.translateM(mModelMatrix, 0, 0.0f, -4.0f, -7.0f);
+        Matrix.translateM(mModelMatrix, 0, 0.0f, -4.0f * sin, -4.0f * cos - 7.0f);
         drawCube();
 
         Matrix.setIdentityM(mModelMatrix, 0);
         Matrix.translateM(mModelMatrix, 0, 0.0f, 0.0f, -5.0f);
-        Matrix.rotateM(mModelMatrix, 0, angleInDegrees, 1.0f, 1.0f, 0.0f);
+        Matrix.rotateM(mModelMatrix, 0, angleInDegrees1, 1.0f, 1.0f, 0.0f);
         drawCube();
 
         // Draw a point to indicate the light.

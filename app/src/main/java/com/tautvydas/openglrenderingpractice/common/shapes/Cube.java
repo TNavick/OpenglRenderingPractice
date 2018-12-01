@@ -222,8 +222,12 @@ public class Cube {
         mTransformation.setPosition(new float[]{x, y, z});
     }
 
-    public void setRotation(float x, float y, float z) {
-        mTransformation.setRotation(new float[]{x, y, z});
+    public void setRotation(float angle, float axisX, float axisY, float axisZ) {
+        mTransformation.setRotation(angle, new float[]{axisX, axisY, axisZ});
+    }
+
+    public void setRotation(float angle, float[] axis) {
+        mTransformation.setRotation(angle, axis);
     }
 
     public void setScale(float x, float y, float z) {

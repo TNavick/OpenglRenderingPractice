@@ -135,27 +135,31 @@ class BasicRenderer3 implements GLSurfaceView.Renderer {
         Matrix.multiplyMV(mLightPosInEyeSpace, 0, mViewMatrix, 0, mLightPosInWorldSpace, 0);
 
         // Draw some cubes.
-        cube1.setPosition(4.0f * sin, 4.0f * cos, -7.0f);
-        cube1.setRotation(angleInDegrees1, 0.0f, 0.0f);
+        //cube1.setPosition(4.0f * sin, 4.0f * cos, -7.0f);
+        cube1.setPosition(4.0f, 0.0f, -7.0f);
+        cube1.setRotation(angleInDegrees1, 1.0f, 0.0f, 0.0f);
         updateUniforms(cube1);
         cube1.draw(mPositionHandle, mColorHandle, mNormalHandle);
 
-        cube2.setPosition(-4.0f * sin, -4.0f * cos, -7.0f);
-        cube2.setRotation(0.0f, angleInDegrees1, 0.0f);
+        //cube2.setPosition(-4.0f * sin, -4.0f * cos, -7.0f);
+        cube2.setPosition(-4.0f, 0.0f, -7.0f);
+        cube2.setRotation(angleInDegrees1, 0.0f, 1.0f, 0.0f);
         updateUniforms(cube2);
         cube2.draw(mPositionHandle, mColorHandle, mNormalHandle);
 
-        cube3.setPosition(0.0f, 4.0f * sin, 4.0f * cos - 7.0f);
-        cube3.setRotation(0.0f, 0.0f, angleInDegrees1);
+        //cube3.setPosition(0.0f, 4.0f * sin, 4.0f * cos - 7.0f);
+        cube3.setPosition(0.0f, 4.0f, -7.0f);
+        cube3.setRotation(angleInDegrees1, 0.0f, 0.0f, 1.0f);
         updateUniforms(cube3);
         cube3.draw(mPositionHandle, mColorHandle, mNormalHandle);
 
-        cube4.setPosition(0.0f, -4.0f * sin, -4.0f * cos - 7.0f);
+        //cube4.setPosition(0.0f, -4.0f * sin, -4.0f * cos - 7.0f);
+        cube4.setPosition(0.0f, -4.0f, -7.0f);
         updateUniforms(cube4);
         cube4.draw(mPositionHandle, mColorHandle, mNormalHandle);
 
         cube5.setPosition(0.0f, 0.0f, -5.0f);
-        cube5.setRotation(angleInDegrees1, angleInDegrees1, 0.0f);
+        cube5.setRotation(angleInDegrees1, 1.0f, 1.0f, 0.0f);
         updateUniforms(cube5);
         cube5.draw(mPositionHandle, mColorHandle, mNormalHandle);
 

@@ -1,10 +1,13 @@
 package com.tautvydas.openglrenderingpractice.lesson3;
 
+import android.content.Context;
 import android.opengl.GLES20;
 import android.opengl.GLSurfaceView;
 import android.opengl.Matrix;
 import android.os.SystemClock;
-import android.util.Log;
+
+import com.tautvydas.openglrenderingpractice.R;
+import com.tautvydas.openglrenderingpractice.common.ShaderHelper;
 
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
@@ -13,9 +16,9 @@ import java.nio.FloatBuffer;
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
 
-import static android.content.ContentValues.TAG;
-
 class BasicRenderer3 implements GLSurfaceView.Renderer {
+
+    private Context mContext;
 
     private final int mBytesPerFloat = 4;
     private final int mPositionDataSize = 3;             // Size of the position data in elements.
@@ -51,7 +54,7 @@ class BasicRenderer3 implements GLSurfaceView.Renderer {
     private String pointVertexShader;
     private String pointFragmentShader;
 
-    public BasicRenderer3() {
+    public BasicRenderer3(Context context) {
         // X, Y, Z
         final float[] cubePositionData = {
                 // In OpenGL counter-clockwise winding is default. This means that when we look at a triangle,
@@ -213,6 +216,7 @@ class BasicRenderer3 implements GLSurfaceView.Renderer {
                 0.0f, -1.0f, 0.0f
         };
 
+        mContext = context;
 
         mCubePositions = ByteBuffer.allocateDirect(cubePositionData.length * mBytesPerFloat).order(ByteOrder.nativeOrder()).asFloatBuffer();
         mCubePositions.put(cubePositionData).position(0);
@@ -250,13 +254,8 @@ class BasicRenderer3 implements GLSurfaceView.Renderer {
 
         Matrix.setLookAtM(mViewMatrix, 0, eyeX, eyeY, eyeZ, lookX, lookY, lookZ, upX, upY, upZ);
 
-        final int vertexShaderHandle = loadShader(GLES20.GL_VERTEX_SHADER, vertexShader);
-        final int fragmentShaderHandle = loadShader(GLES20.GL_FRAGMENT_SHADER, fragmentShader);
-        mPerFragProgramHandle = createProgram(vertexShaderHandle, fragmentShaderHandle, new String[]{"a_Position", "a_Color", "a_Normal"});
-
-        final int pointVertexShaderHandle = loadShader(GLES20.GL_VERTEX_SHADER, pointVertexShader);
-        final int pointFragmentShaderHandle = loadShader(GLES20.GL_FRAGMENT_SHADER, pointFragmentShader);
-        mPointProgramHandle = createProgram(pointVertexShaderHandle, pointFragmentShaderHandle, new String[]{"a_Position"});
+        mPerFragProgramHandle = ShaderHelper.createProgram(mContext, R.string.shader_perFragment_vertex, R.string.shader_perFragment_fragment, new String[]{"a_Position", "a_Color", "a_Normal"});
+        mPointProgramHandle = ShaderHelper.createProgram(mContext, R.string.shader_point_vertex, R.string.shader_point_fragment, new String[]{"a_Position"});
     }
 
     @Override
@@ -334,91 +333,6 @@ class BasicRenderer3 implements GLSurfaceView.Renderer {
         // Draw a point to indicate the light.
         GLES20.glUseProgram(mPointProgramHandle);
         drawLight();
-    }
-
-    public void setVertexShader(String vertexShader) {
-        this.vertexShader = vertexShader;
-    }
-
-    public void setFragmentShader(String fragmentShader) {
-        this.fragmentShader = fragmentShader;
-    }
-
-    public void setPointVertexShader(String pointVertexShader) {
-        this.pointVertexShader = pointVertexShader;
-    }
-
-    public void setPointFragmentShader(String pointFragmentShader) {
-        this.pointFragmentShader = pointFragmentShader;
-    }
-
-    private int loadShader(int shaderType, String shader) {
-        int shaderHandle = GLES20.glCreateShader(shaderType);
-
-        if (shaderHandle != 0) {
-            // Pass in the shader source.
-            GLES20.glShaderSource(shaderHandle, shader);
-
-            // Compile the shader.
-            GLES20.glCompileShader(shaderHandle);
-
-            // Get the compilation status.
-            final int[] compileStatus = new int[1];
-            GLES20.glGetShaderiv(shaderHandle, GLES20.GL_COMPILE_STATUS, compileStatus, 0);
-
-            // If the compilation failed, delete the shader.
-            if (compileStatus[0] == 0) {
-                Log.e(TAG, "Error compiling shader: " + GLES20.glGetShaderInfoLog(shaderHandle));
-                GLES20.glDeleteShader(shaderHandle);
-                shaderHandle = 0;
-            }
-        }
-
-        if (shaderHandle == 0) {
-            throw new RuntimeException("Error creating vertex shader.");
-        }
-
-        return shaderHandle;
-    }
-
-    private int createProgram(int vertexShaderHandle, int fragmentShaderHandle, String[] attributes) {
-        int programHandle = GLES20.glCreateProgram();
-
-        if (programHandle != 0) {
-            // Bind the vertex shader to the program.
-            GLES20.glAttachShader(programHandle, vertexShaderHandle);
-
-            // Bind the fragment shader to the program.
-            GLES20.glAttachShader(programHandle, fragmentShaderHandle);
-
-            // Bind attributes
-            if (attributes != null) {
-                final int size = attributes.length;
-                for (int i = 0; i < size; i++) {
-                    GLES20.glBindAttribLocation(programHandle, i, attributes[i]);
-                }
-            }
-
-            // Link the two shaders together into a program.
-            GLES20.glLinkProgram(programHandle);
-
-            // Get the link status.
-            final int[] linkStatus = new int[1];
-            GLES20.glGetProgramiv(programHandle, GLES20.GL_LINK_STATUS, linkStatus, 0);
-
-            // If the link failed, delete the program.
-            if (linkStatus[0] == 0) {
-                Log.e(TAG, "Error compiling program: " + GLES20.glGetProgramInfoLog(programHandle));
-                GLES20.glDeleteProgram(programHandle);
-                programHandle = 0;
-            }
-        }
-
-        if (programHandle == 0) {
-            throw new RuntimeException("Error creating program.");
-        }
-
-        return programHandle;
     }
 
     private void drawCube() {

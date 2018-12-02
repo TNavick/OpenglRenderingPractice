@@ -31,5 +31,12 @@
             android:text="@string/lesson3"
             android:id="@+id/btn3"
             android:onClick="handleClick" />
+
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/lesson4"
+            android:id="@+id/btn4"
+            android:onClick="handleClick" />
     </LinearLayout>
 </android.support.constraint.ConstraintLayout>

@@ -9,6 +9,7 @@ import android.widget.Button;
 import com.tautvydas.openglrenderingpractice.lesson1.Lesson1Activity;
 import com.tautvydas.openglrenderingpractice.lesson2.Lesson2Activity;
 import com.tautvydas.openglrenderingpractice.lesson3.Lesson3Activity;
+import com.tautvydas.openglrenderingpractice.lesson4.Lesson4Activity;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -30,6 +31,9 @@ public class MainActivity extends AppCompatActivity {
                 break;
             case R.id.btn3:
                 goToLesson(Lesson3Activity.class);
+                break;
+            case R.id.btn4:
+                goToLesson(Lesson4Activity.class);
                 break;
         }
     }

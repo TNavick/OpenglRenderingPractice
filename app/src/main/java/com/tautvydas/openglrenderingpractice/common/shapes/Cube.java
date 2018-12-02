@@ -12,11 +12,13 @@ public class Cube {
     private FloatBuffer mCubePositions;
     private FloatBuffer mCubeColors;
     private FloatBuffer mCubeNormals;
+    private FloatBuffer mCubeTextureCoordinates;
 
     private final int mBytesPerFloat = 4;
     private final int mPositionDataSize = 3;             // Size of the position data in elements.
     private final int mColorDataSize = 4;                // Size of the color data in elements.
     private final int mNormalDataSize = 3;
+    private final int mTextureCoordinateDataSize = 2;
 
     private Transform mTransformation;
 
@@ -182,6 +184,61 @@ public class Cube {
                 0.0f, -1.0f, 0.0f
         };
 
+        // S, T (or X, Y)
+        // Texture coordinate data.
+        // Because images have a Y axis pointing downward (values increase as you move down the image) while
+        // OpenGL has a Y axis pointing upward, we adjust for that here by flipping the Y axis.
+        // What's more is that the texture coordinates are the same for every face.
+        final float[] cubeTextureCoordinateData = {
+                // Front face
+                0.0f, 0.0f,
+                0.0f, 1.0f,
+                1.0f, 0.0f,
+                0.0f, 1.0f,
+                1.0f, 1.0f,
+                1.0f, 0.0f,
+
+                // Right face
+                0.0f, 0.0f,
+                0.0f, 1.0f,
+                1.0f, 0.0f,
+                0.0f, 1.0f,
+                1.0f, 1.0f,
+                1.0f, 0.0f,
+
+                // Back face
+                0.0f, 0.0f,
+                0.0f, 1.0f,
+                1.0f, 0.0f,
+                0.0f, 1.0f,
+                1.0f, 1.0f,
+                1.0f, 0.0f,
+
+                // Left face
+                0.0f, 0.0f,
+                0.0f, 1.0f,
+                1.0f, 0.0f,
+                0.0f, 1.0f,
+                1.0f, 1.0f,
+                1.0f, 0.0f,
+
+                // Top face
+                0.0f, 0.0f,
+                0.0f, 1.0f,
+                1.0f, 0.0f,
+                0.0f, 1.0f,
+                1.0f, 1.0f,
+                1.0f, 0.0f,
+
+                // Bottom face
+                0.0f, 0.0f,
+                0.0f, 1.0f,
+                1.0f, 0.0f,
+                0.0f, 1.0f,
+                1.0f, 1.0f,
+                1.0f, 0.0f
+        };
+
         mCubePositions = ByteBuffer.allocateDirect(cubePositionData.length * mBytesPerFloat).order(ByteOrder.nativeOrder()).asFloatBuffer();
         mCubePositions.put(cubePositionData).position(0);
 
@@ -190,6 +247,9 @@ public class Cube {
 
         mCubeNormals = ByteBuffer.allocateDirect(cubeNormalData.length * mBytesPerFloat).order(ByteOrder.nativeOrder()).asFloatBuffer();
         mCubeNormals.put(cubeNormalData).position(0);
+
+        mCubeTextureCoordinates = ByteBuffer.allocateDirect(cubeTextureCoordinateData.length * mBytesPerFloat).order(ByteOrder.nativeOrder()).asFloatBuffer();
+        mCubeTextureCoordinates.put(cubeTextureCoordinateData).position(0);
 
         mTransformation = new Transform();
     }
@@ -212,6 +272,14 @@ public class Cube {
 
         // draw cube
         GLES20.glDrawArrays(GLES20.GL_TRIANGLES, 0, 36);
+    }
+
+    public void draw(int positionHandle, int colorHandle, int normalHandle, int textureHandle) {
+        mCubeTextureCoordinates.position(0);
+        GLES20.glVertexAttribPointer(textureHandle, mTextureCoordinateDataSize, GLES20.GL_FLOAT, false, 0, mCubeTextureCoordinates);
+        GLES20.glEnableVertexAttribArray(textureHandle);
+
+        draw(positionHandle, colorHandle, normalHandle);
     }
 
     public float[] getTransformation() {

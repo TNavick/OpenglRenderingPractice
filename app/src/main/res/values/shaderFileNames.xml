@@ -5,9 +5,11 @@
     <string name="shader_perFragment_vertex">PerFragLightingShader.vert</string>
     <string name="shader_point_vertex">PointShader.vert</string>
     <string name="shader_textured_vertex">TexturedShader.vert</string>
+    <string name="shader_blending_vertex">BlendingShader.vert</string>
 
     <string name="shader_basic_fragment">BasicShader.frag</string>
     <string name="shader_perFragment_fragment">PerFragLightingShader.frag</string>
     <string name="shader_point_fragment">PointShader.frag</string>
     <string name="shader_textured_fragment">TexturedShader.frag</string>
+    <string name="shader_blending_fragment">BlendingShader.frag</string>
 </resources>

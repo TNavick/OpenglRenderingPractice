@@ -254,7 +254,7 @@ public class Cube {
         mTransformation = new Transform();
     }
 
-    public void draw(int positionHandle, int colorHandle, int normalHandle) {
+    public void draw(int positionHandle, int colorHandle) {
         // Position information
         mCubePositions.position(0);
         GLES20.glVertexAttribPointer(positionHandle, mPositionDataSize, GLES20.GL_FLOAT, false, 0, mCubePositions);
@@ -265,13 +265,16 @@ public class Cube {
         GLES20.glVertexAttribPointer(colorHandle, mColorDataSize, GLES20.GL_FLOAT, false, 0, mCubeColors);
         GLES20.glEnableVertexAttribArray(colorHandle);
 
-        // Normal information
+        // draw cube
+        GLES20.glDrawArrays(GLES20.GL_TRIANGLES, 0, 36);
+    }
+
+    public void draw(int positionHandle, int colorHandle, int normalHandle) {
         mCubeNormals.position(0);
         GLES20.glVertexAttribPointer(normalHandle, mNormalDataSize, GLES20.GL_FLOAT, false, 0, mCubeNormals);
         GLES20.glEnableVertexAttribArray(normalHandle);
 
-        // draw cube
-        GLES20.glDrawArrays(GLES20.GL_TRIANGLES, 0, 36);
+        draw(positionHandle, colorHandle);
     }
 
     public void draw(int positionHandle, int colorHandle, int normalHandle, int textureHandle) {

@@ -4,4 +4,6 @@
     <string name="lesson2">Lesson 2</string>
     <string name="lesson3">Lesson 3</string>
     <string name="lesson4">Lesson 4</string>
+    <string name="lesson5">Lesson 5</string>
+    <string name="lesson_5_startup_toast">Tap the screen to switch between blended and normal mode.</string>
 </resources>
